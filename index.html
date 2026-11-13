@@ -9,7 +9,6 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   :root {
     --bg:#050508;
-    --bg-2:#0a0a0f;
     --red:#ff1a35;
     --red-glow:rgba(255,26,53,0.6);
     --text:#ffffff;
@@ -28,29 +27,14 @@
   a { color:inherit; text-decoration:none; }
   ::selection { background:var(--red); color:#fff; }
 
-  /* ============ ANIMATED PARTICLES BACKGROUND ============ */
-  #particle-canvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: -1;
-    pointer-events: none;
-  }
-  .bg-glow {
-    position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events: none;
-  }
+  /* ============ BACKGROUND GLOW ============ */
+  .bg-glow { position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events: none; }
   .bg-glow::before {
     content:''; position:absolute; width:600px; height:600px; border-radius:50%;
     background:var(--red); filter:blur(150px); opacity:.3;
     top:-200px; left:-100px; animation:float1 15s ease-in-out infinite alternate;
   }
-  .bg-glow::after {
-    content:''; position:absolute; width:500px; height:500px; border-radius:50%;
-    background:#7a1030; filter:blur(150px); opacity:.4;
-    bottom:-100px; right:-100px; animation:float2 20s ease-in-out infinite alternate;
-  }
   @keyframes float1 { 100% { transform:translate(300px, 200px); } }
-  @keyframes float2 { 100% { transform:translate(-200px, -200px); } }
 
   /* ============ CUSTOM CURSOR ============ */
   .cursor-dot, .cursor-ring {
@@ -60,12 +44,9 @@
   .cursor-dot { width:6px; height:6px; background:var(--red); box-shadow:0 0 15px var(--red); }
   .cursor-ring {
     width:40px; height:40px; border:1.5px solid var(--red-glow);
-    transition:width .2s, height .2s, border-color .2s, background .2s;
+    transition:width .2s, height .2s, border-color .2s;
   }
-  .cursor-ring.hover {
-    width:60px; height:60px; background:rgba(255,26,53,.15);
-    border-color:var(--red);
-  }
+  .cursor-ring.hover { width:60px; height:60px; background:rgba(255,26,53,.15); border-color:var(--red); }
   @media (hover:none) { body { cursor:auto; } .cursor-dot,.cursor-ring { display:none; } }
 
   /* ============ NAV ============ */
@@ -76,53 +57,32 @@
     background:var(--glass); backdrop-filter:blur(20px);
     border:1px solid var(--border); box-shadow:0 10px 30px rgba(0,0,0,0.5);
   }
-  nav .logo { font-weight:900; font-size:1.1rem; letter-spacing:1px; display:flex; align-items:center; gap:8px; }
-  nav .logo .logo-box {
-    background:var(--red); color:#fff; padding:2px 6px; border-radius:4px; font-size:0.9rem;
-  }
+  nav .logo { font-weight:900; font-size:1.1rem; display:flex; align-items:center; gap:8px; }
+  nav .logo .logo-box { background:var(--red); color:#fff; padding:2px 6px; border-radius:4px; font-size:0.9rem; }
   nav ul { display:flex; gap:1.5rem; list-style:none; }
-  nav ul a {
-    font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; transition:color .3s;
-  }
+  nav ul a { font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; transition:color .3s; }
   nav ul a:hover, nav ul a.active { color:var(--text); text-shadow:0 0 10px var(--red); }
-  nav .btn-small {
-    background:var(--red); color:#fff; padding:0.5rem 1.2rem; border-radius:50px;
-    font-size:0.8rem; font-weight:700; transition:0.3s; box-shadow:0 0 15px var(--red-glow);
-  }
-  nav .btn-small:hover { box-shadow:0 0 25px var(--red); transform:scale(1.05); }
+  nav .btn-small { background:var(--red); color:#fff; padding:0.5rem 1.2rem; border-radius:50px; font-size:0.8rem; font-weight:700; box-shadow:0 0 15px var(--red-glow); }
   @media(max-width:850px) { nav ul { display:none; } }
 
-  /* ============ LAYOUT & TYPOGRAPHY ============ */
-  section {
-    min-height:100vh; padding:8rem 5vw 4rem; position:relative;
-    display:flex; flex-direction:column; align-items:center; text-align:center;
+  /* ============ HERO SECTION (PARTICLE SCROLL) ============ */
+  #home { 
+    height: 200vh; /* Scroll space for the effect */
+    position: relative;
   }
-  .section-tag {
-    font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; color:var(--red);
-    margin-bottom:0.5rem; font-weight:600;
+  .hero-sticky {
+    position: sticky; top: 0; height: 100vh;
+    display: flex; align-items: center; justify-content: flex-start;
+    padding: 0 5vw; overflow: hidden;
   }
-  h2.section-title {
-    font-size:clamp(2.5rem,6vw,4rem); font-weight:900; line-height:1.1;
-    text-transform:uppercase; margin-bottom:3rem; letter-spacing:-1px;
-  }
-  h2.section-title span { color:var(--red); text-shadow:0 0 20px var(--red-glow); }
   
-  .glass-panel {
-    background:var(--glass); backdrop-filter:blur(15px);
-    border:1px solid var(--border); border-radius:16px;
-    box-shadow: inset 0 0 20px rgba(255,26,53,0.05);
+  .hero-text {
+    position: absolute; z-index: 2; max-width: 600px; pointer-events: none;
+    opacity: 1; transition: opacity 0.1s;
   }
-
-  /* ============ REVEAL ANIMATIONS ============ */
-  .reveal { opacity:0; transform:translateY(40px); transition:1s cubic-bezier(.2,.7,.3,1); }
-  .reveal.in { opacity:1; transform:none; }
-
-  /* ============ HERO SECTION ============ */
-  #home { text-align:left; justify-content:center; align-items:flex-start; padding-top:10rem; }
-  .hero-content { max-width:800px; z-index:2; }
   .hero-title {
-    font-size:clamp(4rem,10vw,7.5rem); font-weight:900; line-height:0.9;
-    text-transform:uppercase; letter-spacing:-3px; margin-bottom:1rem;
+    font-size:clamp(3.5rem,8vw,6.5rem); font-weight:900; line-height:0.9;
+    text-transform:uppercase; letter-spacing:-2px; margin-bottom:1rem;
   }
   .hero-title .grad {
     background:linear-gradient(180deg,#fff 0%,#888 100%);
@@ -130,352 +90,107 @@
   }
   .hero-subtitle {
     display:flex; align-items:center; gap:10px; color:var(--muted);
-    font-size:1.1rem; text-transform:uppercase; letter-spacing:2px; margin-bottom:1.5rem;
+    font-size:1rem; text-transform:uppercase; letter-spacing:2px; margin-bottom:1.5rem;
   }
   .hero-subtitle span { color:var(--red); font-size:1.5rem; }
-  .hero-desc { color:var(--muted); max-width:500px; font-size:1rem; line-height:1.7; margin-bottom:2.5rem; }
-  .hero-btns { display:flex; gap:1rem; }
-  .btn {
-    padding:0.9rem 2rem; border-radius:50px; font-weight:700; font-size:0.85rem;
-    text-transform:uppercase; letter-spacing:1px; transition:0.3s;
-    border:1px solid transparent; display:inline-flex; align-items:center; gap:8px;
+  .hero-desc { color:var(--muted); max-width:400px; font-size:0.95rem; line-height:1.7; margin-bottom:2rem; }
+  
+  /* Canvas for Particles */
+  #hero-particles {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1; pointer-events: none;
   }
-  .btn-primary { 
-    background:linear-gradient(90deg, #ff1a35, #cc001a); color:#fff; 
-    box-shadow:0 0 20px var(--red-glow); border-color:#ff4d66;
-  }
-  .btn-primary:hover { box-shadow:0 0 40px var(--red); transform:translateY(-3px); }
-  .btn-ghost { border-color:rgba(255,255,255,0.2); color:var(--text); }
-  .btn-ghost:hover { background:rgba(255,255,255,0.1); border-color:#fff; }
 
-  /* ============ STATS SECTION ============ */
-  .stats-container {
-    display:grid; grid-template-columns:repeat(3, 1fr); gap:1.5rem; width:100%; max-width:900px; margin-top:4rem;
+  /* Dummy Hero Image (jise particles me todna hai) */
+  .hero-image-dummy {
+    position: absolute; right: 5vw; top: 50%; transform: translateY(-50%);
+    width: 400px; height: 500px;
+    background: radial-gradient(circle at center, #ff1a35 0%, transparent 70%);
+    border-radius: 20px; z-index: 0; opacity: 0.8; filter: blur(20px);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.2); font-weight: 900; font-size: 2rem; text-align: center;
   }
-  .stat-box {
-    padding:2rem; text-align:left; border-radius:12px;
-    background:linear-gradient(135deg, rgba(255,26,53,0.1), transparent);
-    border-left:3px solid var(--red);
-  }
-  .stat-box b { display:block; font-size:2.5rem; font-weight:900; margin-bottom:0.3rem; color:#fff; }
-  .stat-box span { font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
-  @media(max-width:600px) { .stats-container { grid-template-columns:1fr; } }
 
-  /* ============ PROJECTS SECTION ============ */
-  .projects-grid {
-    display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
-    gap:1.5rem; width:100%; max-width:1100px;
-  }
-  .project-card {
-    border-radius:16px; padding:1px; background:linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
-    transition:0.4s; text-align:left;
-  }
+  /* Other Sections */
+  section { padding: 6rem 5vw; display: flex; flex-direction: column; align-items: center; text-align: center; background: var(--bg); position: relative; z-index: 10;}
+  .section-tag { font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; color:var(--red); margin-bottom:0.5rem; font-weight:600; }
+  h2.section-title { font-size:clamp(2.5rem,6vw,4rem); font-weight:900; text-transform:uppercase; margin-bottom:3rem; }
+  h2.section-title span { color:var(--red); text-shadow:0 0 20px var(--red-glow); }
+  
+  .projects-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; width:100%; max-width:1100px; text-align: left; }
+  .project-card { border-radius:16px; padding:1px; background:linear-gradient(135deg, rgba(255,255,255,0.1), transparent); transition:0.4s; }
   .project-card:hover { transform:translateY(-5px); background:linear-gradient(135deg, var(--red), transparent); box-shadow:0 10px 30px rgba(255,26,53,0.2); }
-  .project-inner {
-    background:#0a0a0f; border-radius:15px; height:100%; padding:1.5rem; display:flex; flex-direction:column;
-    border:1px solid rgba(255,255,255,0.05);
-  }
-  .project-thumb {
-    height:160px; border-radius:10px; margin-bottom:1.2rem;
-    background:linear-gradient(45deg, #1a1a24, #050508);
-    display:grid; place-items:center; font-size:2.5rem;
-    border:1px solid rgba(255,26,53,0.2); position:relative; overflow:hidden;
-  }
-  .project-thumb::after { content:''; position:absolute; inset:0; background:radial-gradient(circle at center, var(--red-glow), transparent 70%); opacity:0.3; }
-  .project-card:hover .project-thumb::after { opacity:0.6; }
-  .project-card h3 { font-size:1.2rem; margin-bottom:0.5rem; }
-  .project-card p { color:var(--muted); font-size:0.85rem; line-height:1.5; margin-bottom:1.5rem; flex-grow:1; }
-  .project-tags { display:flex; gap:0.5rem; flex-wrap:wrap; }
-  .project-tags span {
-    font-size:0.65rem; padding:0.2rem 0.6rem; border-radius:4px;
-    background:rgba(255,26,53,0.1); color:var(--red); border:1px solid rgba(255,26,53,0.3);
-  }
+  .project-inner { background:#0a0a0f; border-radius:15px; padding:1.5rem; border:1px solid rgba(255,255,255,0.05); }
+  .project-inner h3 { font-size:1.2rem; margin-bottom:0.5rem; }
+  .project-inner p { color:var(--muted); font-size:0.85rem; }
 
-  /* ============ ABOUT SECTION ============ */
-  .about-layout {
-    display:grid; grid-template-columns:1fr 1fr; gap:3rem; max-width:1000px; text-align:left; align-items:center;
-  }
-  .about-text p { color:var(--muted); line-height:1.8; margin-bottom:1.5rem; font-size:1rem; }
-  .about-text p b { color:#fff; }
-  .about-img-box {
-    height:400px; border-radius:16px; border:1px solid var(--border);
-    background:linear-gradient(135deg, #1a1a24, #050508);
-    position:relative; overflow:hidden; display:grid; place-items:center;
-  }
-  .about-img-box::before {
-    content:'SKJ'; font-size:8rem; font-weight:900; color:rgba(255,255,255,0.03); position:absolute;
-  }
-  .about-img-box::after {
-    content:''; position:absolute; width:200px; height:200px; background:var(--red);
-    filter:blur(100px); opacity:0.3; bottom:-50px; right:-50px;
-  }
-  @media(max-width:800px) { .about-layout { grid-template-columns:1fr; } .about-img-box { height:250px; } }
-
-  /* ============ SERVICES / SKILLS SECTION ============ */
-  .list-container { width:100%; max-width:800px; display:flex; flex-direction:column; gap:1rem; text-align:left; }
-  .list-item {
-    display:flex; justify-content:space-between; align-items:center;
-    padding:1.2rem 1.5rem; border-radius:12px;
-    background:var(--glass); border:1px solid rgba(255,255,255,0.05);
-    transition:0.3s; cursor:pointer;
-  }
-  .list-item:hover {
-    background:rgba(255,26,53,0.05); border-color:rgba(255,26,53,0.3); transform:translateX(10px);
-  }
-  .list-item h4 { font-size:1rem; font-weight:600; }
-  .list-item span { font-size:0.8rem; color:var(--muted); border:1px solid rgba(255,255,255,0.1); padding:0.3rem 0.8rem; border-radius:50px; }
-  .list-item:hover span { background:var(--red); color:#fff; border-color:var(--red); }
-
-  /* ============ MY ARSENAL (TOOLS) ============ */
-  .tools-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:1.5rem; max-width:700px; margin-top:2rem; }
-  .tool-box {
-    width:80px; height:80px; border-radius:16px; display:grid; place-items:center;
-    background:var(--glass); border:1px solid var(--border); font-size:2rem;
-    transition:0.3s; position:relative;
-  }
-  .tool-box:hover { transform:translateY(-5px) scale(1.05); border-color:var(--red); box-shadow:0 0 20px var(--red-glow); background:rgba(255,26,53,0.1); }
-  .tool-box::after { content:attr(data-name); position:absolute; bottom:-25px; font-size:0.7rem; color:var(--muted); opacity:0; transition:0.3s; }
-  .tool-box:hover::after { opacity:1; bottom:-20px; }
-
-  /* ============ CONTACT SECTION ============ */
-  .contact-form-box {
-    width:100%; max-width:600px; padding:2.5rem; border-radius:20px;
-    background:linear-gradient(180deg, rgba(20,20,25,0.8), rgba(10,10,15,0.9));
-    border:1px solid rgba(255,26,53,0.3); box-shadow:0 20px 50px rgba(0,0,0,0.5);
-    text-align:left; backdrop-filter:blur(20px);
-  }
-  .form-group { margin-bottom:1.2rem; }
-  .form-group label { display:block; font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:0.5rem; }
-  .form-group input, .form-group textarea {
-    width:100%; padding:1rem; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1);
-    border-radius:8px; color:#fff; font-family:inherit; font-size:0.9rem; outline:none; transition:0.3s;
-  }
-  .form-group input:focus, .form-group textarea:focus { border-color:var(--red); box-shadow:0 0 10px rgba(255,26,53,0.2); }
-  .form-group textarea { height:120px; resize:none; }
-  .btn-submit {
-    width:100%; padding:1rem; background:var(--red); color:#fff; border:none; border-radius:8px;
-    font-weight:700; text-transform:uppercase; letter-spacing:1px; cursor:pointer; transition:0.3s;
-    box-shadow:0 0 15px var(--red-glow);
-  }
-  .btn-submit:hover { background:#ff4d66; box-shadow:0 0 30px var(--red); }
-
-  footer {
-    text-align:center; padding:2rem; color:var(--muted); font-size:0.8rem;
-    border-top:1px solid rgba(255,255,255,0.05); background:var(--bg);
-  }
+  footer { text-align:center; padding:2rem; color:var(--muted); font-size:0.8rem; border-top:1px solid rgba(255,255,255,0.05); background:var(--bg); z-index:10; position: relative;}
   footer b { color:var(--red); }
 </style>
 </head>
 <body>
 
-<!-- BACKGROUND EFFECTS -->
-<canvas id="particle-canvas"></canvas>
 <div class="bg-glow"></div>
-
-<!-- CUSTOM CURSOR -->
 <div class="cursor-dot"></div>
 <div class="cursor-ring"></div>
 
-<!-- NAV -->
 <nav>
   <div class="logo"><span class="logo-box">SKJ</span> SAURABH</div>
   <ul>
     <li><a href="#home" class="active">Home</a></li>
     <li><a href="#projects">Projects</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#contact">Contact</a></li>
   </ul>
   <a href="#contact" class="btn-small">HIRE ME</a>
 </nav>
 
-<!-- HERO SECTION -->
+<!-- HERO SECTION WITH SCROLL PARTICLES -->
 <section id="home">
-  <div class="hero-content reveal">
-    <div class="hero-subtitle">Full-Stack Developer <span>•</span> UI/UX Designer</div>
-    <h1 class="hero-title">
-      <span class="grad">SAURABH</span><br>
-      <span class="grad">KUMAR JHA.</span>
-    </h1>
-    <p class="hero-desc">
-      Crafting modern, high-performance web experiences from Darbhanga, Bihar. 
-      I turn complex problems into clean, beautiful, and functional code.
-    </p>
-    <div class="hero-btns">
-      <a href="#projects" class="btn btn-primary">Explore My Work ↗</a>
-      <a href="#contact" class="btn btn-ghost">Get In Touch</a>
-    </div>
-  </div>
-</section>
+  <div class="hero-sticky">
+    <!-- Aapki Photo / Dummy Element jise todna hai -->
+    <div class="hero-image-dummy">IMAGE<br>DISINTEGRATES<br>ON SCROLL</div>
+    
+    <!-- Canvas jahan particles banenge -->
+    <canvas id="hero-particles"></canvas>
 
-<!-- STATS SECTION -->
-<section style="min-height:auto; padding-top:0;">
-  <div class="stats-container reveal">
-    <div class="stat-box glass-panel">
-      <b>15+</b>
-      <span>Projects Completed</span>
-    </div>
-    <div class="stat-box glass-panel">
-      <b>100%</b>
-      <span>Client Satisfaction</span>
-    </div>
-    <div class="stat-box glass-panel">
-      <b>2+</b>
-      <span>Years of Coding</span>
+    <!-- Text Content -->
+    <div class="hero-text">
+      <div class="hero-subtitle">Full-Stack Developer <span>•</span> UI/UX Designer</div>
+      <h1 class="hero-title">
+        <span class="grad">SAURABH</span><br>
+        <span class="grad">KUMAR JHA.</span>
+      </h1>
+      <p class="hero-desc">
+        Crafting modern, high-performance web experiences from Darbhanga, Bihar. 
+        I turn complex problems into clean, beautiful code.
+      </p>
     </div>
   </div>
 </section>
 
 <!-- PROJECTS SECTION -->
 <section id="projects">
-  <div class="section-tag reveal">Featured Work</div>
-  <h2 class="section-title reveal">PROJECTS<span>.</span></h2>
+  <div class="section-tag">Featured Work</div>
+  <h2 class="section-title">PROJECTS<span>.</span></h2>
   
   <div class="projects-grid">
-    <div class="project-card reveal">
+    <div class="project-card">
       <div class="project-inner">
-        <div class="project-thumb">🌐</div>
         <h3>Personal Portfolio</h3>
-        <p>A dark-themed, fully responsive portfolio with custom cursor, glassmorphism UI and smooth animations.</p>
-        <div class="project-tags">
-          <span>HTML</span><span>CSS</span><span>JavaScript</span>
-        </div>
+        <p>A dark-themed, fully responsive portfolio with custom cursor and smooth animations.</p>
       </div>
     </div>
-    
-    <div class="project-card reveal">
+    <div class="project-card">
       <div class="project-inner">
-        <div class="project-thumb">📊</div>
         <h3>Analytics Dashboard</h3>
-        <p>An interactive dashboard concept with live-style charts, dark mode and data visualization components.</p>
-        <div class="project-tags">
-          <span>JavaScript</span><span>Chart.js</span>
-        </div>
+        <p>An interactive dashboard concept with live-style charts and data visualization.</p>
       </div>
     </div>
-
-    <div class="project-card reveal">
+    <div class="project-card">
       <div class="project-inner">
-        <div class="project-thumb">🌦️</div>
         <h3>Weather App</h3>
-        <p>Real-time weather application with city search, powered by a public API and a sleek glassmorphism layout.</p>
-        <div class="project-tags">
-          <span>API</span><span>Fetch</span><span>CSS</span>
-        </div>
+        <p>Real-time weather application with city search, powered by a public API.</p>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ABOUT SECTION -->
-<section id="about">
-  <div class="section-tag reveal">The Story Behind The Code</div>
-  <h2 class="section-title reveal">ABOUT <span>ME.</span></h2>
-  
-  <div class="about-layout">
-    <div class="about-text reveal">
-      <p>I am <b>Saurabh Kumar Jha</b>, a passionate developer based in Darbhanga, Bihar. I specialize in building web applications that are both visually striking and technically solid.</p>
-      <p>My journey in tech started with curiosity — and today it's a passion for creating seamless digital experiences. From frontend animations to backend logic, I enjoy handling the full stack.</p>
-      <div style="display:flex; gap:15px; margin-top:2rem;">
-        <a href="https://github.com/saurabhkashyap-maker" target="_blank" class="btn btn-ghost" style="padding:0.6rem 1.2rem; font-size:0.75rem;">GitHub Profile</a>
-        <a href="tel:+917050624940" class="btn btn-primary" style="padding:0.6rem 1.2rem; font-size:0.75rem;">Call Me</a>
-      </div>
-    </div>
-    <div class="about-img-box reveal">
-      <!-- Aap yahan apni photo ka <img> tag laga sakte hain -->
-    </div>
-  </div>
-</section>
-
-<!-- SERVICES SECTION -->
-<section id="services">
-  <div class="section-tag reveal">What I Offer</div>
-  <h2 class="section-title reveal">SERVICES<span>.</span></h2>
-  
-  <div class="list-container">
-    <div class="list-item reveal">
-      <h4>Web Development</h4>
-      <span>From $499</span>
-    </div>
-    <div class="list-item reveal">
-      <h4>UI / UX Design</h4>
-      <span>From $299</span>
-    </div>
-    <div class="list-item reveal">
-      <h4>Responsive Design</h4>
-      <span>Included</span>
-    </div>
-    <div class="list-item reveal">
-      <h4>Performance Optimization</h4>
-      <span>From $199</span>
-    </div>
-  </div>
-</section>
-
-<!-- SKILLS SECTION -->
-<section id="skills">
-  <div class="section-tag reveal">My Technical Skills</div>
-  <h2 class="section-title reveal">SKILLS<span>.</span></h2>
-  
-  <div class="list-container">
-    <div class="list-item reveal">
-      <h4>Frontend (HTML, CSS, JS)</h4>
-      <span>92%</span>
-    </div>
-    <div class="list-item reveal">
-      <h4>Responsive & UI Design</h4>
-      <span>88%</span>
-    </div>
-    <div class="list-item reveal">
-      <h4>Git & Version Control</h4>
-      <span>85%</span>
-    </div>
-  </div>
-
-  <div style="margin-top:5rem; width:100%; display:flex; flex-direction:column; align-items:center;">
-    <div class="section-tag reveal">Software & Tools</div>
-    <h2 class="section-title reveal" style="margin-bottom:1rem;">MY ARSENAL<span>.</span></h2>
-    
-    <div class="tools-grid reveal">
-      <div class="tool-box" data-name="HTML5">🌐</div>
-      <div class="tool-box" data-name="CSS3">🎨</div>
-      <div class="tool-box" data-name="JavaScript">⚡</div>
-      <div class="tool-box" data-name="GitHub">🐙</div>
-      <div class="tool-box" data-name="VS Code">💻</div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT SECTION -->
-<section id="contact">
-  <div class="section-tag reveal">Let's Build Something</div>
-  <h2 class="section-title reveal">CONTACT<span>.</span></h2>
-  
-  <div class="contact-form-box reveal">
-    <div style="display:flex; align-items:center; gap:10px; margin-bottom:1.5rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:1rem;">
-      <div style="width:10px; height:10px; background:#00ff00; border-radius:50%; box-shadow:0 0 10px #00ff00;"></div>
-      <span style="font-size:0.8rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px;">Available for freelance work</span>
-    </div>
-    
-    <!-- Yahan action="mailto:..." laga sakte hain agar email chahiye -->
-    <form onsubmit="event.preventDefault(); alert('Thank you! Form submitted successfully.');">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-        <div class="form-group">
-          <label>Your Name</label>
-          <input type="text" placeholder="John Doe" required>
-        </div>
-        <div class="form-group">
-          <label>Your Email</label>
-          <input type="email" placeholder="john@example.com" required>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Message or Project Scope</label>
-        <textarea placeholder="Let's build something cinematic together..." required></textarea>
-      </div>
-      <button type="submit" class="btn-submit">Send Message</button>
-    </form>
   </div>
 </section>
 
@@ -484,119 +199,156 @@
 </footer>
 
 <script>
-  /* ============ 1. PARTICLE CANVAS (FIRE EMBERS EFFECT) ============ */
-  const canvas = document.getElementById('particle-canvas');
-  const ctx = canvas.getContext('2d');
-  let width, height;
-  let particles = [];
+  /* ============ CUSTOM CURSOR ============ */
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  window.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
+  });
+  function animateRing() {
+    rx += (mx - rx) * 0.15; ry += (my - ry) * 0.15;
+    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+  document.querySelectorAll('a, button, .project-card').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+  });
 
+  /* ============ HERO IMAGE DISINTEGRATION EFFECT ============ */
+  const canvas = document.getElementById('hero-particles');
+  const ctx = canvas.getContext('2d');
+  const heroSection = document.getElementById('home');
+  const dummyImage = document.querySelector('.hero-image-dummy');
+  const heroText = document.querySelector('.hero-text');
+
+  let particles = [];
+  let animationFrameId;
+  let canvasWidth, canvasHeight;
+
+  // 1. Initialize Canvas
   function initCanvas() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
+    canvasWidth = canvas.width = window.innerWidth;
+    canvasHeight = canvas.height = window.innerHeight;
   }
 
+  // 2. Particle Class
   class Particle {
-    constructor() {
-      this.x = Math.random() * width;
-      this.y = Math.random() * height;
-      this.size = Math.random() * 2 + 0.5;
-      this.speedX = Math.random() * 1 - 0.5;
-      this.speedY = Math.random() * -1 - 0.2; // Move upwards
-      this.opacity = Math.random() * 0.5 + 0.1;
+    constructor(x, y, targetX, targetY) {
+      this.x = x;
+      this.y = y;
+      this.originX = x;
+      this.originY = y;
+      this.targetX = targetX; // Scatter position
+      this.targetY = targetY;
+      this.size = Math.random() * 3 + 1;
+      this.color = `rgba(255, ${Math.random() * 50 + 20}, ${Math.random() * 50 + 20}, ${Math.random() * 0.5 + 0.5})`;
+      this.vx = 0;
+      this.vy = 0;
+      this.friction = 0.9;
+      this.ease = 0.05;
     }
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      if (this.y < 0) {
-        this.y = height;
-        this.x = Math.random() * width;
-      }
+    
+    update(progress) {
+      // Move towards target based on scroll progress
+      this.x = this.originX + (this.targetX - this.originX) * progress;
+      this.y = this.originY + (this.targetY - this.originY) * progress;
+      
+      // Add some float/noise effect
+      this.x += Math.sin(Date.now() * 0.002 + this.originY) * progress * 20;
+      this.y += Math.cos(Date.now() * 0.002 + this.originX) * progress * 20;
     }
+    
     draw() {
-      ctx.fillStyle = `rgba(255, 26, 53, ${this.opacity})`;
+      ctx.fillStyle = this.color;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
       ctx.fill();
-      // Glow effect
       ctx.shadowBlur = 10;
       ctx.shadowColor = 'rgba(255, 26, 53, 0.8)';
     }
   }
 
+  // 3. Create Particles from Image position
   function createParticles() {
     particles = [];
-    const particleCount = window.innerWidth < 768 ? 40 : 100;
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle());
+    // Get position of the dummy image
+    const rect = dummyImage.getBoundingClientRect();
+    
+    // Create grid of particles based on image dimensions
+    const spacing = 8; // Lower = more particles (heavy)
+    
+    for (let y = rect.top; y < rect.bottom; y += spacing) {
+      for (let x = rect.left; x < rect.right; x += spacing) {
+        // Only create particles inside the visible area
+        if (x > 0 && x < canvasWidth && y > 0 && y < canvasHeight) {
+          // Scatter targets (randomly across screen)
+          const targetX = Math.random() * canvasWidth;
+          const targetY = Math.random() * canvasHeight;
+          particles.push(new Particle(x, y, targetX, targetY));
+        }
+      }
     }
   }
 
-  function animateParticles() {
-    ctx.clearRect(0, 0, width, height);
+  // 4. Animation Loop based on Scroll
+  function animateHero() {
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    
+    // Calculate scroll progress within the hero section
+    const scrollY = window.scrollY;
+    const heroHeight = heroSection.offsetHeight;
+    const windowHeight = window.innerHeight;
+    
+    // Progress goes from 0 to 1 as user scrolls down
+    let progress = scrollY / (heroHeight - windowHeight);
+    progress = Math.max(0, Math.min(1, progress)); // Clamp between 0 and 1
+
+    // Fade out text and dummy image as particles scatter
+    dummyImage.style.opacity = 1 - (progress * 3); // Fades out fast
+    heroText.style.opacity = 1 - (progress * 1.5);
+    
+    // Draw and update particles
     particles.forEach(p => {
-      p.update();
+      p.update(progress);
       p.draw();
     });
-    requestAnimationFrame(animateParticles);
+    
+    animationFrameId = requestAnimationFrame(animateHero);
   }
+
+  // Initialize on load
+  window.addEventListener('load', () => {
+    initCanvas();
+    createParticles();
+    animateHero();
+  });
 
   window.addEventListener('resize', () => {
     initCanvas();
     createParticles();
   });
 
-  initCanvas();
-  createParticles();
-  animateParticles();
-
-  /* ============ 2. CUSTOM CURSOR ============ */
-  const dot = document.querySelector('.cursor-dot');
-  const ring = document.querySelector('.cursor-ring');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-
-  window.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
-  });
-
-  function animateRing() {
-    rx += (mx - rx) * 0.15;
-    ry += (my - ry) * 0.15;
-    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
-    requestAnimationFrame(animateRing);
-  }
-  animateRing();
-
-  document.querySelectorAll('a, button, .project-card, .list-item, .tool-box').forEach(el => {
-    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
-    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
-  });
-
-  /* ============ 3. SCROLL REVEAL ============ */
-  const revealEls = document.querySelectorAll('.reveal');
+  /* ============ SMOOTH SCROLL REVEAL ============ */
+  const reveals = document.querySelectorAll('.section-title, .project-card');
   const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
+    entries.forEach(entry => {
       if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('in'), i * 100);
-        io.unobserve(entry.target);
+        entry.target.style.opacity = 1;
+        entry.target.style.transform = 'translateY(0)';
       }
     });
   }, { threshold: 0.1 });
-  revealEls.forEach(el => io.observe(el));
-
-  /* ============ 4. ACTIVE NAV LINK ON SCROLL ============ */
-  const sections = document.querySelectorAll('section');
-  const navLinks = document.querySelectorAll('nav ul a');
-  const navIO = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        navLinks.forEach(l => l.classList.remove('active'));
-        const active = document.querySelector(`nav ul a[href="#${entry.target.id}"]`);
-        if (active) active.classList.add('active');
-      }
-    });
-  }, { threshold: 0.4 });
-  sections.forEach(s => navIO.observe(s));
+  
+  reveals.forEach(el => {
+    el.style.opacity = 0;
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'all 0.8s ease-out';
+    io.observe(el);
+  });
 </script>
 </body>
 </html>
