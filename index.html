@@ -18,7 +18,7 @@
   }
   html { scroll-behavior:smooth; }
   body {
-    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family:'Segoe UI', system-ui, sans-serif;
     background:var(--bg);
     color:var(--text);
     overflow-x:hidden;
@@ -30,11 +30,11 @@
   /* ============ BACKGROUND GLOW ============ */
   .bg-glow { position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events: none; }
   .bg-glow::before {
-    content:''; position:absolute; width:300px; height:300px; border-radius:50%;
-    background:var(--red); filter:blur(100px); opacity:.3;
-    top:0; left:-100px; animation:float1 15s ease-in-out infinite alternate;
+    content:''; position:absolute; width:600px; height:600px; border-radius:50%;
+    background:var(--red); filter:blur(150px); opacity:.15;
+    top:-200px; left:-100px; animation:float1 15s ease-in-out infinite alternate;
   }
-  @keyframes float1 { 100% { transform:translate(200px, 200px); } }
+  @keyframes float1 { 100% { transform:translate(300px, 300px); } }
 
   /* ============ CUSTOM CURSOR ============ */
   .cursor-dot, .cursor-ring {
@@ -49,11 +49,11 @@
   .cursor-ring.hover { width:60px; height:60px; background:rgba(255,26,53,.15); border-color:var(--red); }
   @media (hover:none) { body { cursor:auto; } .cursor-dot,.cursor-ring { display:none; } }
 
-  /* ============ NAV (Mobile Friendly) ============ */
+  /* ============ NAV ============ */
   nav {
     position:fixed; top:15px; left:50%; transform:translateX(-50%);
     z-index:100; display:flex; align-items:center; justify-content:space-between;
-    padding:0.6rem 1rem; border-radius:50px; width:calc(100% - 30px); max-width:1000px;
+    padding:0.6rem 1.5rem; border-radius:50px; width:calc(100% - 30px); max-width:1000px;
     background:var(--glass); backdrop-filter:blur(20px);
     border:1px solid var(--border); box-shadow:0 10px 30px rgba(0,0,0,0.5);
   }
@@ -65,17 +65,25 @@
   nav .btn-small { background:var(--red); color:#fff; padding:0.5rem 1rem; border-radius:50px; font-size:0.75rem; font-weight:700; box-shadow:0 0 15px var(--red-glow); }
   @media(max-width:850px) { nav ul { display:none; } }
 
-  /* ============ HERO SECTION (FIXED PARTICLES) ============ */
+  /* ============ SCROLL REVEAL CLASSES ============ */
+  .reveal-up { opacity:0; transform:translateY(60px); transition:all 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .reveal-left { opacity:0; transform:translateX(-60px); transition:all 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .reveal-right { opacity:0; transform:translateX(60px); transition:all 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .reveal-scale { opacity:0; transform:scale(0.8); transition:all 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  
+  .reveal-up.in, .reveal-left.in, .reveal-right.in, .reveal-scale.in { 
+    opacity:1; transform:translate(0,0) scale(1); 
+  }
+
+  /* ============ HERO SECTION ============ */
   #home { height: 150vh; position: relative; }
   .hero-sticky {
     position: sticky; top: 0; height: 100vh;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     padding: 0 5vw; overflow: hidden;
   }
-  
   .hero-text {
     position: relative; z-index: 2; max-width: 700px; text-align: center;
-    transition: opacity 0.1s;
   }
   .hero-title {
     font-size:clamp(2.5rem,8vw,6rem); font-weight:900; line-height:1.1;
@@ -92,36 +100,64 @@
   .hero-subtitle span { color:var(--red); font-size:1.2rem; }
   .hero-desc { color:var(--muted); max-width:500px; margin: 0 auto 2rem; font-size:0.95rem; line-height:1.6; }
   
-  /* Canvas for Particles */
   #hero-particles {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     z-index: 1; pointer-events: none;
   }
-
-  /* Center Glowing Element (jo tootega) */
   .hero-center-glow {
     position: absolute; width: 250px; height: 250px; border-radius: 50%;
     background: radial-gradient(circle, rgba(255,26,53,0.8) 0%, transparent 70%);
     z-index: 0; filter: blur(15px);
-    display: flex; align-items: center; justify-content: center;
     box-shadow: 0 0 50px rgba(255,26,53,0.5);
   }
 
-  /* Other Sections */
-  section { padding: 5rem 5vw; display: flex; flex-direction: column; align-items: center; text-align: center; background: var(--bg); position: relative; z-index: 10;}
-  .section-tag { font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; color:var(--red); margin-bottom:0.5rem; font-weight:600; }
-  h2.section-title { font-size:clamp(2rem,6vw,3.5rem); font-weight:900; text-transform:uppercase; margin-bottom:2rem; }
+  /* ============ GENERAL SECTION ============ */
+  section.content-sec { padding: 6rem 5vw; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 10; background: var(--bg); }
+  .section-tag { font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--red); margin-bottom:0.5rem; font-weight:700; }
+  h2.section-title { font-size:clamp(2.2rem,6vw,4rem); font-weight:900; text-transform:uppercase; margin-bottom:3rem; text-align: center;}
   h2.section-title span { color:var(--red); text-shadow:0 0 20px var(--red-glow); }
-  
-  .projects-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; width:100%; max-width:1100px; text-align: left; }
-  .project-card { border-radius:16px; padding:1px; background:linear-gradient(135deg, rgba(255,255,255,0.1), transparent); transition:0.4s; }
-  .project-card:hover { transform:translateY(-5px); background:linear-gradient(135deg, var(--red), transparent); box-shadow:0 10px 30px rgba(255,26,53,0.2); }
-  .project-inner { background:#0a0a0f; border-radius:15px; padding:1.5rem; border:1px solid rgba(255,255,255,0.05); }
-  .project-inner h3 { font-size:1.1rem; margin-bottom:0.5rem; }
-  .project-inner p { color:var(--muted); font-size:0.85rem; }
 
-  footer { text-align:center; padding:2rem; color:var(--muted); font-size:0.8rem; border-top:1px solid rgba(255,255,255,0.05); background:var(--bg); z-index:10; position: relative;}
-  footer b { color:var(--red); }
+  /* ============ PROJECTS (Staggered Scroll) ============ */
+  .projects-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:2rem; width:100%; max-width:1100px; }
+  .project-card { 
+    border-radius:16px; padding:1px; 
+    background:linear-gradient(135deg, rgba(255,255,255,0.1), transparent); 
+    transition:0.4s; 
+  }
+  .project-card:hover { transform:translateY(-8px); background:linear-gradient(135deg, var(--red), transparent); box-shadow:0 15px 40px rgba(255,26,53,0.2); }
+  .project-inner { background:#0a0a0f; border-radius:15px; padding:2rem; border:1px solid rgba(255,255,255,0.05); height: 100%; }
+  .project-inner h3 { font-size:1.3rem; margin-bottom:0.8rem; }
+  .project-inner p { color:var(--muted); font-size:0.9rem; line-height:1.6; }
+
+  /* ============ SKILLS (Sticky Scroll Progress) ============ */
+  #skills { height: 200vh; position: relative; }
+  .skills-sticky {
+    position: sticky; top: 0; height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 0 5vw; background: var(--bg);
+  }
+  .skills-container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 2rem; }
+  .skill-row { display: flex; flex-direction: column; gap: 0.8rem; opacity: 0; transform: translateY(30px); transition: 0.6s ease; }
+  .skill-row.in { opacity: 1; transform: translateY(0); }
+  .skill-label { display: flex; justify-content: space-between; font-weight: 600; font-size: 1.1rem; }
+  .skill-label span:last-child { color: var(--red); }
+  .bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+  .bar-fill { height: 100%; width: 0; background: linear-gradient(90deg, #ff1a35, #ff6b82); box-shadow: 0 0 15px var(--red-glow); transition: width 1.5s ease; }
+
+  /* ============ ABOUT SECTION ============ */
+  .about-content { max-width: 800px; text-align: center; color: var(--muted); line-height: 1.8; font-size: 1.1rem; }
+  .about-content p { margin-bottom: 1.5rem; }
+  .about-content b { color: #fff; }
+
+  /* ============ CONTACT ============ */
+  .contact-btn {
+    padding: 1rem 2.5rem; border-radius: 50px; background: var(--red); color: #fff;
+    font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
+    box-shadow: 0 0 20px var(--red-glow); transition: 0.3s; display: inline-block; margin-top: 2rem;
+  }
+  .contact-btn:hover { box-shadow: 0 0 40px var(--red); transform: translateY(-3px); }
+
+  footer { text-align:center; padding:2rem; color:var(--muted); font-size:0.8rem; border-top:1px solid rgba(255,255,255,0.05); background:var(--bg); position: relative; z-index:10; }
 </style>
 </head>
 <body>
@@ -135,6 +171,8 @@
   <ul>
     <li><a href="#home" class="active">Home</a></li>
     <li><a href="#projects">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
   </ul>
   <a href="#contact" class="btn-small">HIRE ME</a>
 </nav>
@@ -142,14 +180,8 @@
 <!-- HERO SECTION -->
 <section id="home">
   <div class="hero-sticky">
-    
-    <!-- Center Glowing Core -->
     <div class="hero-center-glow"></div>
-
-    <!-- Canvas for Particles -->
     <canvas id="hero-particles"></canvas>
-
-    <!-- Text Content -->
     <div class="hero-text">
       <div class="hero-subtitle">Full-Stack Developer <span>•</span> UI/UX Designer</div>
       <h1 class="hero-title">
@@ -158,31 +190,33 @@
       </h1>
       <p class="hero-desc">
         Crafting modern, high-performance web experiences from Darbhanga, Bihar. 
-        I turn complex problems into clean, beautiful code.
+        Scroll down to see the magic.
       </p>
     </div>
   </div>
 </section>
 
 <!-- PROJECTS SECTION -->
-<section id="projects">
-  <div class="section-tag">Featured Work</div>
-  <h2 class="section-title">PROJECTS<span>.</span></h2>
+<section id="projects" class="content-sec">
+  <div class="reveal-up">
+    <div class="section-tag">Featured Work</div>
+    <h2 class="section-title">PROJECTS<span>.</span></h2>
+  </div>
   
   <div class="projects-grid">
-    <div class="project-card">
+    <div class="project-card reveal-left">
       <div class="project-inner">
         <h3>Personal Portfolio</h3>
         <p>A dark-themed, fully responsive portfolio with custom cursor and smooth animations.</p>
       </div>
     </div>
-    <div class="project-card">
+    <div class="project-card reveal-up">
       <div class="project-inner">
         <h3>Analytics Dashboard</h3>
         <p>An interactive dashboard concept with live-style charts and data visualization.</p>
       </div>
     </div>
-    <div class="project-card">
+    <div class="project-card reveal-right">
       <div class="project-inner">
         <h3>Weather App</h3>
         <p>Real-time weather application with city search, powered by a public API.</p>
@@ -191,8 +225,53 @@
   </div>
 </section>
 
+<!-- ABOUT SECTION -->
+<section id="about" class="content-sec" style="background: #08080c;">
+  <div class="reveal-scale">
+    <div class="section-tag">Who Am I</div>
+    <h2 class="section-title">ABOUT <span>ME.</span></h2>
+  </div>
+  <div class="about-content reveal-up">
+    <p>I am <b>Saurabh Kumar Jha</b>, a passionate developer based in Darbhanga, Bihar. I specialize in building web applications that are both visually striking and technically solid.</p>
+    <p>My journey in tech started with curiosity — and today it's a passion for creating seamless digital experiences. From frontend animations to backend logic, I enjoy handling the full stack.</p>
+  </div>
+</section>
+
+<!-- SKILLS SECTION (Sticky Scroll) -->
+<section id="skills">
+  <div class="skills-sticky">
+    <div class="section-tag">My Expertise</div>
+    <h2 class="section-title">SKILLS<span>.</span></h2>
+    
+    <div class="skills-container">
+      <div class="skill-row">
+        <div class="skill-label"><span>Frontend (HTML, CSS, JS)</span><span>92%</span></div>
+        <div class="bar"><div class="bar-fill" data-width="92"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-label"><span>Responsive & UI Design</span><span>88%</span></div>
+        <div class="bar"><div class="bar-fill" data-width="88"></div></div>
+      </div>
+      <div class="skill-row">
+        <div class="skill-label"><span>Git & Version Control</span><span>85%</span></div>
+        <div class="bar"><div class="bar-fill" data-width="85"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section id="contact" class="content-sec" style="min-height: 60vh; justify-content: center;">
+  <div class="reveal-up" style="text-align: center;">
+    <div class="section-tag">Let's Connect</div>
+    <h2 class="section-title" style="margin-bottom: 1rem;">READY TO <span>BUILD?</span></h2>
+    <p style="color: var(--muted); max-width: 500px; margin: 0 auto;">Have a project in mind or just want to say hi? Let's create something amazing together.</p>
+    <a href="tel:+917050624940" class="contact-btn">Call Me Now</a>
+  </div>
+</section>
+
 <footer>
-  Designed & built with <b>♥</b> by Saurabh Kumar Jha — © 2025
+  Designed & built with <b style="color:var(--red)">♥</b> by Saurabh Kumar Jha — © 2025
 </footer>
 
 <script>
@@ -215,13 +294,12 @@
     el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
   });
 
-  /* ============ RESPONSIVE HERO DISINTEGRATION EFFECT ============ */
+  /* ============ HERO PARTICLES ============ */
   const canvas = document.getElementById('hero-particles');
   const ctx = canvas.getContext('2d');
   const heroSection = document.getElementById('home');
   const heroText = document.querySelector('.hero-text');
   const centerGlow = document.querySelector('.hero-center-glow');
-
   let particles = [];
   let canvasWidth, canvasHeight;
 
@@ -232,82 +310,93 @@
 
   class Particle {
     constructor(x, y, targetX, targetY) {
-      this.x = x;
-      this.y = y;
-      this.originX = x;
-      this.originY = y;
-      this.targetX = targetX; 
-      this.targetY = targetY;
+      this.x = x; this.y = y;
+      this.originX = x; this.originY = y;
+      this.targetX = targetX; this.targetY = targetY;
       this.size = Math.random() * 2.5 + 1;
       this.color = `rgba(255, ${Math.random() * 80 + 30}, ${Math.random() * 50 + 20}, ${Math.random() * 0.5 + 0.5})`;
     }
-    
     update(progress) {
       this.x = this.originX + (this.targetX - this.originX) * progress;
       this.y = this.originY + (this.targetY - this.originY) * progress;
-      
-      // Random floating effect
-      this.x += Math.sin(Date.now() * 0.001 + this.originY) * progress * 15;
-      this.y += Math.cos(Date.now() * 0.001 + this.originX) * progress * 15;
+      this.x += Math.sin(Date.now() * 0.001 + this.originY) * progress * 20;
+      this.y += Math.cos(Date.now() * 0.001 + this.originX) * progress * 20;
     }
-    
     draw() {
       ctx.fillStyle = this.color;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
       ctx.fill();
-      ctx.shadowBlur = 15;
+      ctx.shadowBlur = 10;
       ctx.shadowColor = 'rgba(255, 26, 53, 0.8)';
     }
   }
 
-  // FIX: Create particles from a fixed center point, not bounding box
   function createParticles() {
     particles = [];
     const centerX = canvasWidth / 2;
     const centerY = canvasHeight / 2;
-    const radius = 120; // Size of the core that breaks
-    
-    // Create particle grid in a circle
+    const radius = 120;
     for (let angle = 0; angle < Math.PI * 2; angle += 0.1) {
       for (let r = 0; r < radius; r += 5) {
         const x = centerX + Math.cos(angle) * r;
         const y = centerY + Math.sin(angle) * r;
-        
-        // Random scatter target
-        const targetX = Math.random() * canvasWidth;
-        const targetY = Math.random() * canvasHeight;
-        
-        particles.push(new Particle(x, y, targetX, targetY));
+        particles.push(new Particle(x, y, Math.random() * canvasWidth, Math.random() * canvasHeight));
       }
     }
   }
 
   function animateHero() {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    
     const scrollY = window.scrollY;
     const heroHeight = heroSection.offsetHeight;
     const windowHeight = window.innerHeight;
-    
-    // Calculate scroll progress (0 to 1)
     let progress = scrollY / (heroHeight - windowHeight);
     progress = Math.max(0, Math.min(1, progress));
 
-    // Fade out text and glow as user scrolls
     heroText.style.opacity = Math.max(0, 1 - (progress * 2.5));
     centerGlow.style.opacity = Math.max(0, 1 - (progress * 3));
     centerGlow.style.transform = `scale(${1 + progress * 2})`;
     
-    // Update and draw particles
-    particles.forEach(p => {
-      p.update(progress);
-      p.draw();
-    });
-    
+    particles.forEach(p => { p.update(progress); p.draw(); });
     requestAnimationFrame(animateHero);
   }
 
+  /* ============ SCROLL REVEAL OBSERVER ============ */
+  const reveals = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right, .reveal-scale');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => revealObserver.observe(el));
+
+  /* ============ STICKY SKILLS SCROLL ANIMATION ============ */
+  const skillsSection = document.getElementById('skills');
+  const skillRows = document.querySelectorAll('.skill-row');
+  const bars = document.querySelectorAll('.bar-fill');
+  
+  function animateSkills() {
+    const rect = skillsSection.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+    
+    // Calculate progress based on sticky section position
+    let progress = -rect.top / (rect.height - windowHeight);
+    progress = Math.max(0, Math.min(1, progress));
+
+    // Reveal each skill row based on scroll progress
+    skillRows.forEach((row, index) => {
+      if (progress > (index * 0.2)) {
+        row.classList.add('in');
+        bars[index].style.width = bars[index].getAttribute('data-width') + '%';
+      }
+    });
+  }
+
+  /* ============ INITIALIZE ON LOAD ============ */
   window.addEventListener('load', () => {
     initCanvas();
     createParticles();
@@ -318,6 +407,9 @@
     initCanvas();
     createParticles();
   });
+
+  // Listen to scroll for skills sticky animation
+  window.addEventListener('scroll', animateSkills);
 </script>
 </body>
 </html>
